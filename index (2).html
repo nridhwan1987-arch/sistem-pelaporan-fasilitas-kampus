@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SiLapor Kampus: sistem informasi pelaporan dan pemeliharaan fasilitas kampus yang cepat, transparan, dan mudah digunakan.">
+  <meta name="theme-color" content="#0F2C59">
+  <title>SiLapor Kampus</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F2C59'/%3E%3Cpath d='M9 22V12l7-5 7 5v10h-4v-6h-6v6z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Lewati ke konten utama</a>
+
+  <div class="a11y-bar" role="region" aria-label="Pengaturan tampilan">
+    <div class="container d-flex flex-wrap justify-content-end align-items-center gap-2">
+      <span>Ukuran teks:</span>
+      <div class="btn-group btn-group-sm" role="group" aria-label="Ukuran teks">
+        <button class="btn btn-light" data-size="0" aria-label="Teks normal">A</button>
+        <button class="btn btn-light" data-size="1" aria-label="Teks besar">A+</button>
+        <button class="btn btn-light" data-size="2" aria-label="Teks sangat besar">A++</button>
+      </div>
+      <button class="btn btn-light btn-sm" id="hcBtn" aria-pressed="false">Kontras tinggi</button>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" aria-label="Navigasi utama">
+    <div class="container">
+      <a class="brand" href="#/"><span class="brand-mark"><i class="bi bi-buildings" aria-hidden="true"></i></span>SiLapor Kampus</a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nv" aria-controls="nv" aria-label="Buka menu"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse justify-content-end" id="nv">
+        <ul class="navbar-nav gap-lg-1 mt-2 mt-lg-0">
+          <li class="nav-item"><a class="nav-link" data-r="home" href="#/">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" data-r="lapor" href="#/lapor">Buat Laporan</a></li>
+          <li class="nav-item"><a class="nav-link" data-r="lacak" href="#/lacak">Cek Status Laporan</a></li>
+          <li class="nav-item"><a class="nav-link" data-r="galeri" href="#/galeri">Daftar Laporan</a></li>
+          <li class="nav-item"><a class="nav-link" data-r="login admin" id="navAdm" href="#/login">Login Admin</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main" tabindex="-1">
+
+    <!-- BERANDA -->
+    <section class="view" id="v-home" aria-labelledby="h-home">
+      <header class="hero">
+        <div class="container">
+          <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+              <p class="eyebrow">Sistem Informasi Pelaporan dan Pemeliharaan Fasilitas</p>
+              <h1 id="h-home">Fasilitas Kampus Rusak? Laporkan Segera</h1>
+              <p class="lead my-3">Sampaikan kerusakan fasilitas kampus melalui formulir singkat, lalu pantau tindak lanjutnya dengan nomor tiket. Semua proses terbuka dan mudah dilacak.</p>
+              <div class="d-flex flex-wrap gap-2">
+                <a href="#/lapor" class="btn btn-warning btn-lg fw-bold">Buat Laporan Baru</a>
+                <a href="#/lacak" class="btn btn-outline-light btn-lg fw-semibold">Lacak Laporan</a>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="flow" aria-label="Alur pelaporan">
+                <h2 class="h6 text-uppercase fw-bold mb-3">Alur pelaporan</h2>
+                <ol class="list-unstyled mb-0">
+                  <li><span class="no">1</span><div><b>Isi formulir</b><small>Tuliskan lokasi, kategori, dan kondisi kerusakan.</small></div></li>
+                  <li><span class="no">2</span><div><b>Terima nomor tiket</b><small>Simpan nomor tiket sebagai bukti laporan.</small></div></li>
+                  <li><span class="no">3</span><div><b>Pantau perkembangan</b><small>Lihat status dan catatan petugas kapan saja.</small></div></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="container stats">
+        <div class="row g-3" id="stats" aria-label="Ringkasan laporan"></div>
+      </div>
+      <div class="container py-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+          <div>
+            <h2 class="title h3 mb-1">Laporan Terbaru</h2>
+            <p class="text-secondary mb-0">Ditampilkan secara terbuka sebagai bentuk transparansi.</p>
+          </div>
+          <a href="#/galeri" class="btn btn-outline-navy btn-sm">Lihat semua laporan</a>
+        </div>
+        <div class="row g-4" id="latest"></div>
+      </div>
+    </section>
+
+    <!-- DAFTAR LAPORAN -->
+    <section class="view" id="v-galeri" aria-labelledby="h-galeri">
+      <div class="container py-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+          <div>
+            <h1 class="title h3 mb-1" id="h-galeri">Daftar Semua Laporan</h1>
+            <p class="text-secondary mb-0">Pilih salah satu laporan untuk melihat perkembangannya.</p>
+          </div>
+          <div class="small text-secondary" id="galCount" aria-live="polite"></div>
+        </div>
+
+        <!-- Filter Dropdown: Tanggal, Status, dan Jenis Kategori -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body p-3">
+            <div class="row g-2 align-items-end">
+              <div class="col-sm-6 col-md-4">
+                <label class="form-label small fw-semibold mb-1" for="gFilterTgl">Filter Tanggal</label>
+                <select class="form-select" id="gFilterTgl">
+                  <option value="all">Semua tanggal</option>
+                  <option value="today">Hari ini</option>
+                  <option value="7">7 hari terakhir</option>
+                  <option value="30">30 hari terakhir</option>
+                </select>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <label class="form-label small fw-semibold mb-1" for="gFilterStatus">Filter Status</label>
+                <select class="form-select" id="gFilterStatus">
+                  <option value="-1">Semua status</option>
+                </select>
+              </div>
+              <div class="col-sm-12 col-md-4">
+                <label class="form-label small fw-semibold mb-1" for="gFilterKat">Filter Jenis Kategori</label>
+                <select class="form-select" id="gFilterKat">
+                  <option value="-1">Semua kategori</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4" id="all"></div>
+      </div>
+    </section>
+
+    <!-- FORMULIR PELAPORAN -->
+    <section class="view" id="v-lapor" aria-labelledby="h-lapor">
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-9">
+            <div class="card shadow-sm">
+              <div class="card-body p-4 p-md-5">
+                <h1 class="title h3" id="h-lapor">Formulir Pelaporan</h1>
+                <p class="text-secondary mb-1">Isi data dengan lengkap agar laporan dapat segera diverifikasi.</p>
+                <p class="small text-secondary mb-4">Kolom bertanda <span class="req" aria-hidden="true">*</span> wajib diisi.</p>
+                <form id="form" novalidate class="row g-3">
+                  <fieldset class="row g-3 m-0 p-0">
+                    <legend class="h6 fw-bold navy mb-0">1. Identitas pelapor</legend>
+                    <div class="col-md-6">
+                      <label class="form-label" for="nama">Nama lengkap <span class="req" aria-hidden="true">*</span></label>
+                      <input class="form-control" id="nama" required minlength="3" autocomplete="name">
+                      <div class="invalid-feedback">Nama wajib diisi, minimal 3 huruf.</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label" for="nim">NIM atau NIP <span class="req" aria-hidden="true">*</span></label>
+                      <input class="form-control" id="nim" required pattern="[0-9]{6,20}" inputmode="numeric">
+                      <div class="invalid-feedback">Isi NIM atau NIP dengan angka saja (6 sampai 20 digit).</div>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label" for="kontak">Email atau nomor WhatsApp <span class="req" aria-hidden="true">*</span></label>
+                      <input class="form-control" id="kontak" required autocomplete="email" aria-describedby="kontakH" pattern="([^@\s]+@[^@\s]+\.[^@\s]+)|(\+?[0-9]{9,15})">
+                      <div class="form-text" id="kontakH">Contoh: nama@kampus.ac.id atau 081234567890</div>
+                      <div class="invalid-feedback">Isi email atau nomor WhatsApp yang valid.</div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="row g-3 m-0 p-0 mt-2">
+                    <legend class="h6 fw-bold navy mb-0">2. Lokasi kerusakan</legend>
+                    <div class="col-md-6">
+                      <label class="form-label" for="gedung">Gedung <span class="req" aria-hidden="true">*</span></label>
+                      <select class="form-select" id="gedung" required></select>
+                      <div class="invalid-feedback">Pilih gedung.</div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label" for="ruang">Nomor ruangan atau lantai <span class="req" aria-hidden="true">*</span></label>
+                      <input class="form-control" id="ruang" required placeholder="Contoh: Ruang 204, Lantai 2">
+                      <div class="invalid-feedback">Isi nomor ruangan atau lantai.</div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="m-0 p-0 mt-2" aria-describedby="katErr">
+                    <legend class="h6 fw-bold navy">3. Kategori fasilitas <span class="req" aria-hidden="true">*</span></legend>
+                    <div class="row g-2 kat" id="kat"></div>
+                    <div class="small text-danger mt-2 d-none" id="katErr" role="alert">Pilih salah satu kategori fasilitas.</div>
+                    <div class="mt-3 d-none" id="katLainWrap">
+                      <label class="form-label" for="katLain">Sebutkan jenis fasilitas lainnya <span class="req" aria-hidden="true">*</span></label>
+                      <input class="form-control" id="katLain" placeholder="Contoh: Papan tulis, Pintu kelas, Dispenser">
+                      <div class="invalid-feedback">Isi jenis fasilitas yang dilaporkan.</div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="row g-3 m-0 p-0 mt-2">
+                    <legend class="h6 fw-bold navy mb-0">4. Rincian kerusakan</legend>
+                    <div class="col-12">
+                      <label class="form-label" for="desk">Deskripsi kerusakan <span class="req" aria-hidden="true">*</span></label>
+                      <textarea class="form-control" id="desk" rows="4" required minlength="15" maxlength="500" aria-describedby="cnt"></textarea>
+                      <div class="invalid-feedback">Deskripsi minimal 15 karakter.</div>
+                      <div class="form-text text-end" id="cnt">0 / 500 karakter</div>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label" for="foto">Foto bukti <span class="text-secondary fw-normal">(opsional, format JPG atau PNG, maksimal 5 MB)</span></label>
+                      <input class="form-control" type="file" id="foto" accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-describedby="fotoErr fotoHint">
+                      <div class="small text-danger mt-1 d-none" id="fotoErr" role="alert"></div>
+
+                      <!-- Footer upload: pratinjau, info file, dan tombol hapus -->
+                      <div class="foto-box d-none" id="fotoBox">
+                        <img id="prev" class="foto-thumb" alt="Pratinjau foto bukti">
+                        <div class="foto-info">
+                          <div class="fw-semibold text-truncate" id="fotoNama"></div>
+                          <div class="small text-secondary" id="fotoUkuran"></div>
+                        </div>
+                        <button type="button" class="btn btn-outline-danger btn-sm" id="fotoHapus">
+                          <i class="bi bi-trash3 me-1" aria-hidden="true"></i>Hapus foto
+                        </button>
+                      </div>
+                      <div class="form-text" id="fotoHint">Salah pilih foto? Tekan "Hapus foto", lalu pilih ulang.</div>
+                    </div>
+                  </fieldset>
+
+                  <div class="col-12 d-grid mt-3">
+                    <button class="btn btn-navy btn-lg" type="submit">Kirim Laporan</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LACAK STATUS -->
+    <section class="view" id="v-lacak" aria-labelledby="h-lacak">
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <h1 class="title h3" id="h-lacak">Cek Status Laporan</h1>
+            <p class="text-secondary">Masukkan nomor tiket yang diterima setelah mengirim laporan.</p>
+            <form id="fLacak" class="mb-4" role="search">
+              <label class="form-label" for="tk">Nomor tiket</label>
+              <div class="input-group input-group-lg">
+                <input class="form-control" id="tk" placeholder="Contoh: TIKET-2026-089" autocomplete="off" required>
+                <button class="btn btn-navy px-4">Cari</button>
+              </div>
+            </form>
+            <div id="lacakOut" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGIN ADMIN -->
+    <section class="view" id="v-login" aria-labelledby="h-login">
+      <div class="container py-5">
+        <div class="login-box card shadow-sm">
+          <div class="card-body p-4">
+            <div class="text-center mb-3 fs-1 navy"><i class="bi bi-shield-lock" aria-hidden="true"></i></div>
+            <h1 class="title h4 text-center mb-1" id="h-login">Login Petugas Sarpras</h1>
+            <p class="text-center text-secondary small mb-4">Akun demo: username <b>admin</b>, kata sandi <b>admin123</b></p>
+            <div class="alert alert-danger d-none" id="lgErr" role="alert">Username atau kata sandi salah. Silakan coba lagi.</div>
+            <form id="fLogin" novalidate>
+              <label class="form-label" for="us">Username</label>
+              <input class="form-control mb-3" id="us" required autocomplete="username">
+              <label class="form-label" for="pw">Kata sandi</label>
+              <input class="form-control mb-2" id="pw" type="password" required autocomplete="current-password">
+              <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="showPw">
+                <label class="form-check-label" for="showPw">Tampilkan kata sandi</label>
+              </div>
+              <button class="btn btn-navy w-100 btn-lg">Masuk</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD ADMIN -->
+    <section class="view" id="v-admin" aria-labelledby="h-admin">
+      <div class="container py-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+          <div>
+            <h1 class="title h3 mb-0" id="h-admin">Dashboard Petugas Sarpras</h1>
+            <span class="text-secondary">Kelola dan tindak lanjuti laporan yang masuk.</span>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" id="resetBtn">Reset data contoh</button>
+            <button class="btn btn-outline-navy" id="logout">Keluar</button>
+          </div>
+        </div>
+        <div class="row g-3 mb-4" id="aStats"></div>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="row g-2 mb-3">
+              <div class="col-md-5">
+                <label class="visually-hidden" for="s">Cari laporan</label>
+                <input class="form-control" id="s" type="search" placeholder="Cari tiket, nama, atau lokasi">
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="visually-hidden" for="fs">Filter status</label>
+                <select class="form-select" id="fs"><option value="-1">Semua status</option></select>
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="visually-hidden" for="fg">Filter gedung</label>
+                <select class="form-select" id="fg"><option value="">Semua gedung</option></select>
+              </div>
+            </div>
+            <div class="small text-secondary mb-2" id="rowCount" aria-live="polite"></div>
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <caption class="visually-hidden">Daftar laporan fasilitas</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Tiket</th>
+                    <th scope="col">Foto</th>
+                    <th scope="col">Pelapor</th>
+                    <th scope="col">Lokasi</th>
+                    <th scope="col">Kategori</th>
+                    <th scope="col">Tanggal</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="text-end">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tb"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container py-4 border-top mt-4">
+    <div class="d-flex flex-wrap justify-content-between gap-2 small text-secondary">
+      <span>&copy; 2026 SiLapor Kampus. Proyek akhir mata kuliah Pemrograman Web.</span>
+      <span>HTML, CSS, JavaScript, dan Bootstrap 5</span>
+    </div>
+  </footer>
+
+  <!-- MODAL TIKET -->
+  <div class="modal fade" id="mTiket" tabindex="-1" aria-labelledby="mtT">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-3">
+        <div class="modal-body">
+          <div class="display-5 text-success"><i class="bi bi-check-circle" aria-hidden="true"></i></div>
+          <h2 class="h4 fw-bold mt-2" id="mtT">Laporan berhasil dikirim</h2>
+          <p class="text-secondary">Simpan nomor tiket berikut untuk melacak perkembangan laporan.</p>
+          <div class="ticket" id="tkNo"></div>
+          <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
+            <button class="btn btn-navy" id="cp">Salin nomor tiket</button>
+            <a class="btn btn-outline-navy" id="goTrack" href="#/lacak" data-bs-dismiss="modal">Lacak sekarang</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DETAIL -->
+  <div class="modal fade" id="mDet" tabindex="-1" aria-labelledby="mdT">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="mdT">Detail Laporan</h2>
+          <button class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body" id="mdB"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL UPDATE -->
+  <div class="modal fade" id="mUpd" tabindex="-1" aria-labelledby="muT">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form id="fUpd" novalidate>
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="muT">Update Status</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+          </div>
+          <div class="modal-body">
+            <label class="form-label" for="us2">Status baru</label>
+            <select class="form-select mb-3" id="us2"></select>
+            <label class="form-label" for="cat">Catatan tindak lanjut <span class="req" aria-hidden="true">*</span></label>
+            <textarea class="form-control mb-1" id="cat" rows="3" required placeholder="Contoh: Teknisi sedang mengecek freon AC"></textarea>
+            <div class="invalid-feedback">Catatan wajib diisi.</div>
+            <label class="form-label mt-3" for="fs2">Foto bukti setelah diperbaiki <span class="text-secondary fw-normal">(opsional)</span></label>
+            <input class="form-control" type="file" id="fs2" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+            <div class="foto-box d-none" id="fs2Box">
+              <div class="foto-info small text-secondary text-truncate" id="fs2Nama"></div>
+              <button type="button" class="btn btn-outline-danger btn-sm" id="fs2Hapus">
+                <i class="bi bi-trash3 me-1" aria-hidden="true"></i>Hapus foto
+              </button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+            <button class="btn btn-navy">Simpan perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL HAPUS -->
+  <div class="modal fade" id="mDel" tabindex="-1" aria-labelledby="mxT">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="mxT">Hapus laporan</h2>
+          <button class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body" id="mxB"></div>
+        <div class="modal-footer">
+          <button class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+          <button class="btn btn-danger" id="delOk">Ya, hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast text-bg-dark" role="status" aria-live="polite" aria-atomic="true">
+      <div class="toast-body" id="tm"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
